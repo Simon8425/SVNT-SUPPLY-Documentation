@@ -1,56 +1,56 @@
-# Zobrazenie produktov a obnovovanie
+# Zobrazovanie produktov a systém aktualizácie
 
-## Mriežka na landing page
+## Mriežka na úvodnej stránke
 
-Landing page zobrazuje publikované produkty v jednej mriežke. Predvolené zoradenie je **Featured** (označené ako *Editor's choice*).
+Úvodná stránka (landing page) zobrazuje publikované produkty v jednej mriežke. Predvolené usporiadanie je **Doporučené** (Featured, na webe označené ako *Editor's choice*).
 
-Poradie Featured riadi server-side `popularity` skóre, ktoré sa pravidelne prepočítava pre každý publikovaný produkt. Skóre kombinuje päť signálov:
+Poradie doporučených produktov (Featured) riadi skóre popularity (`popularity`), ktoré sa prepočítava na strane servera v pravidelných intervaloch pre každý zverejnený produkt. Toto skóre v sebe spája päť signálov:
 
 | Signál | Váha | Zdroj |
 |---|---|---|
-| **Novosť** | ~35% | Sekvenčný counter priradený pri prvom publikovaní. Vyšší = novší. |
-| **Staff pick** | ~20% | Manuálny flag nastavený v admin produktovom editore. |
-| **Freshness** | ~10% | Časový pokles od vydania alebo publikovania. Novšie položky majú vyššie skóre. |
-| **Najnovší drop** | ~15% | Produkt patrí do najnovšieho vydaného Sunday Dropu. |
-| **Period jitter** | ~20% | Deterministický hash produktového ID + aktuálne časové okno. Zabezpečuje, že sa poradie mení bez toho, aby bolo náhodné. |
+| **Novosť (Newness)** | ~35% | Sekvenčné počítadlo (counter) priradené pri prvom zverejnení produktu. Vyššia hodnota = novší produkt. |
+| **Staff pick** | ~20% | Manuálny príznak (flag) nastavený administrátorom v editore produktov. |
+| **Čerstvosť (Freshness)** | ~10% | Časový pokles (decay) skóre od dátumu vydania alebo publikovania. Čím novší produkt, tým vyššie skóre. |
+| **Najnovší drop** | ~15% | Produkt patrí do najnovšieho vydaného nedeľného dropu (Sunday Drop). |
+| **Periodický posun (Jitter)** | ~20% | Deterministický hash ID produktu a aktuálneho časového okna. Zabezpečuje obmenu poradia pri každom načítaní bez toho, aby bolo náhodné. |
 
-Novosť + najnovší drop = približne polovica skóre, takže produkty z najnovšieho dropu dominujú vrchnej časti mriežky počas svojho týždňa. Staff picky poskytujú editoriálny override. Jitter udržuje povrch živý.
+Novosť a najnovší drop tvoria dohromady približne polovicu celkového skóre, takže novinky prirodzene dominujú hornej časti mriežky počas celého týždňa od vydania. Príznaky „Staff pick“ umožňujú manuálny editoriálny zásah a prepísanie poradia. Jitter zase zabezpečuje, že ponuka na webe pôsobí neustále živo a dynamicky.
 
 ## Periodický refresh job
 
-Plánovaná databázová úloha beží niekoľkokrát denne. Kontroluje single-row guard tabuľku a preskočí, ak posledný refresh bol príliš nedávno. Každý beh:
-1. Prepočíta popularitu pre každý publikovaný produkt
-2. Identifikuje najnovší vydaný drop a aplikuje boost
-3. Prebuduje súvisiace produkty pre každý produkt
-4. Aktualizuje časovú značku guard tabuľky
+Naplánovaná databázová úloha (cron job) beží niekoľkokrát denne. Kontroluje pomocnú jednoradovú tabuľku (guard table) a ak bol posledný refresh spustený len nedávno, proces sa preskočí. Každé spustenie:
+1. Prepočíta skóre popularity pre každý publikovaný produkt.
+2. Identifikuje najnovší vydaný drop a aplikuje naň bonifikáciu (boost).
+3. Pregeneruje odporúčania súvisiacich produktov (related products) pre každý produkt.
+4. Aktualizuje časovú pečiatku v pomocnej tabuľke (guard table).
 
-## Freshness na strane klienta
+## Aktualizácia na strane klienta
 
-Storefront pravidelne pollinguje backend a odoberá real-time zmeny katalógu. In-memory stav katalógu rýchlo expiruje. Ak sa real-time udalosť stratí, ďalší poll alebo focus okna stiahne čerstvé dáta. Typická latencia je pod sekundu; najhorší fallback je pod minútu.
+Klientsky web (storefront) v krátkych intervaloch dopytuje (polluje) backend a odoberá zmeny v katalógu v reálnom čase. Stav katalógu v operačnej pamäti (in-memory) rýchlo expiruje. Ak sa správa o zmene v reálnom čase stratí, nasledujúci dopyt alebo opätovná aktivácia okna prehliadača (focus) stiahne čerstvé dáta. Typická latencia je pod jednu sekundu, v najhoršom možnom prípade (fallback) sa dáta aktualizujú do minúty.
 
-## Sekvenčné zoradenie
+## Sekvenčné usporiadanie
 
-Databázový trigger reaguje na insert produktu a na prvé publikovanie. Priradí ďalšiu hodnotu sekvenčného countera, ktorá zostáva trvalo. To zaručuje, že signál novosti sa nikdy nestratí — aj keď sa produkt archivuje a znovu publikuje, jeho pôvodné poradie zostáva.
+Databázový spúšťač (trigger) reaguje na pridanie (insert) nového produktu a na jeho prvé zverejnenie. Priradí mu ďalšiu hodnotu zo sekvenčného počítadla, ktorá už zostáva produktu natrvalo. To zaručuje, že signál novosti sa nikdy nestratí – aj keď sa produkt archivuje a neskôr opäť publikuje, jeho pôvodné poradie sa zachová.
 
 ## Produktové obrázky
 
 ### Odstránenie pozadia
 
-Všetky produktové cutout obrázky začínajú ako raw fotografie. Pozadie sa odstraňuje pomocou **PhotoRoom**, ktoré je v súčasnosti pre tento workflow zadarmo. Cutout sa nahrá do admina ako PNG s transparentnosťou. V budúcnosti sa plánuje API pripojenie k PhotoRoom (alebo podobnej službe) na automatizáciu tohto kroku.
+Všetky obrázky s orezaným pozadím (cutouts) začínajú ako neupravené (raw) fotografie. Pozadie sa odstraňuje prostredníctvom nástroja **PhotoRoom**, ktorý je momentálne pre tento workflow bezplatný. Orezaný produkt sa nahrá do administrácie ako súbor PNG s priehľadnosťou. V budúcnosti sa plánuje priame prepojenie cez API na PhotoRoom (alebo podobnú službu), čím sa tento krok plne automatizuje.
 
-### Upload a optimalizácia
+### Nahrávanie a optimalizácia
 
-Po odstránení pozadia prechádzajú obrázky trojkrokovým admin workflow:
-1. **Vyžiadanie upload URL** — podpísané URL z media edge funkcie
-2. **Upload** — priamy PUT do object storage
-3. **Finalizácia** — edge funkcia spracuje obrázok: zistí rozmery, alfa kanál, bounding box a optimalizuje súbor na doručenie
+Po odstránení pozadia prechádzajú obrázky v administrácii trojkrokovým procesom:
+1. **Požiadavka na nahrávanie (Upload URL)** – získanie zabezpečeného (podpísaného) URL z Edge funkcie pre médiá.
+2. **Nahranie (Upload)** – priamy zápis (PUT) do objektového úložiska (object storage).
+3. **Dokončenie (Finalizácia)** – Edge funkcia spracuje obrázok: zistí rozmery, alfa kanál (priehľadnosť), ohraničenie (bounding box) a optimalizuje súbor na rýchle doručenie používateľom.
 
-Verejná dodávka prebieha cez cachovací proxy, ktorý pridáva dlhodobé immutable cache hlavičky pre každý storage objekt. Obrázky sa nikdy neservujú priamo z raw storage endpointu.
+Doručovanie obrázkov používateľom prebieha cez cachovaciu proxy službu, ktorá ku každému objektu v úložisku pridáva HTTP hlavičky pre dlhodobé a nemenné (immutable) ukladanie do vyrovnávacej pamäte. Obrázky sa nikdy neposkytujú priamo z pôvodného úložiska (raw storage endpoint).
 
-### Storage
+### Úložisko (Storage)
 
-Počas bety sú obrázky uložené v **Supabase S3-compatible storage bucket**. Pre produkciu je plán migrovať na dedikovaného object storage providera, ako napríklad **Google Cloud Storage**, **Amazon S3** alebo **Yandex S3**, v závislosti od ceny a výkonu.
+Počas beta testovania sú obrázky uložené v **úložisku Supabase (kompatibilnom s S3)**. Pre produkčnú verziu plánujeme migráciu k špecializovanému poskytovateľovi objektového úložiska, ako je napríklad **Google Cloud Storage**, **Amazon S3** alebo **Yandex S3**, v závislosti od ceny a výkonu.
 
-## Newsletter signup
+## Prihlásenie na odber newslettera
 
-Verejný signup formulár posiela dáta do newsletter edge funkcie. Funkcia overí formát emailu, skontroluje honeypot pole, vynúti rate limiting podľa IP a emailu, hashuje IP pre audit log a vloží odberateľa do zamknutej tabuľky. Tabuľka odberateľov nemá verejný write prístup — jediný vstupný bod je edge funkcia.
+Verejný registračný formulár na odber newslettera odosiela údaje do príslušnej Edge funkcie. Tá overí formát e-mailovej adresy, skontroluje skryté ochranné pole (honeypot), uplatní limity na frekvenciu požiadaviek (rate limiting) podľa IP adresy a e-mailu, zahashuje IP adresu pre potreby bezpečnostného logu a zapíše odberateľa do zabezpečenej tabuľky. Tabuľka odberateľov neumožňuje verejný zápis – jediným vstupným bodom je práve spomínaná Edge funkcia.
