@@ -14,10 +14,10 @@ Architecture, product philosophy, and business model docs for SVNT SUPPLY.
 
 ## Slovenčina
 
-- [Register funkcií admin panela](./sk/admin-panel-functions.md)
-- [Systém Sunday Dropov](./sk/drops-system.md)
+- [Prehľad funkcií administrátorského panelu](./sk/admin-panel-functions.md)
+- [Systém nedeľných dropov](./sk/drops-system.md)
 - [Filozofia značky](./sk/brand-philosophy.md)
 - [Systém kategórií](./sk/categories-system.md)
-- [Wishlist a zdieľanie](./sk/wishlist-sharing.md)
-- [Biznis model](./sk/business-model.md)
-- [Zobrazenie produktov a obnovovanie](./sk/product-surface-and-refresh.md)
+- [Zoznam prianí a zdieľanie](./sk/wishlist-sharing.md)
+- [Obchodný model](./sk/business-model.md)
+- [Zobrazovanie a aktualizácia produktov](./sk/product-surface-and-refresh.md)
