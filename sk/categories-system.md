@@ -2,56 +2,56 @@
 
 ## Úloha kategórií
 
-SVNT SUPPLY používa kategórie ako primárnu štruktúru prehliadania. Landing page obsahuje kurátorskú množinu kategórií (tech, home, books, lifestyle, jewelry, clothing, cosmetics, gifts, pets, travel, beauty, skincare, fragrance, fashion, accessories, shoes, bags a catch-all "all"). Nie sú generované z produktových dát — sú to zámerná, ručne udržiavaná taxonómia.
+SVNT SUPPLY využíva kategórie ako základnú štruktúru na prezeranie webu. Úvodná stránka (landing page) obsahuje kurátorovaný výber kategórií (tech, home, books, lifestyle, jewelry, clothing, cosmetics, gifts, pets, travel, beauty, skincare, fragrance, fashion, accessories, shoes, bags a zastrešujúcu kategóriu „all“). Kategórie sa negenerujú automaticky z produktových dát – ide o premyslenú, ručne spravovanú taxonómiu.
 
 ## Dátový model
 
-Každá kategória má:
+Každá kategória obsahuje tieto polia:
 
 | Pole | Účel |
 |---|---|
 | `id` | Krátky textový kľúč |
-| `slug` | URL-safe unikátny identifikátor |
-| `label` | Zobrazovaný názov v UI |
-| `image_url` | Pozadie dlaždice (voliteľné, fallback na produktový obrázok) |
-| `desktop_sort_order` | Pozícia v desktopovej mriežke |
-| `mobile_sort_order` | Pozícia v mobile zozname |
+| `slug` | Unikátny identifikátor vhodný pre URL adresy |
+| `label` | Názov kategórie zobrazovaný v UI |
+| `image_url` | Obrázok na pozadí dlaždice (voliteľný, inak sa použije obrázok produktu) |
+| `desktop_sort_order` | Poradie zobrazenia v mriežke na desktope |
+| `mobile_sort_order` | Poradie zobrazenia v mobilnom zozname |
 
-Kategórie existujú nezávisle od produktov. Produkt referencuje primárnu kategóriu a pomocná tabuľka podporuje **multi-category** priradenie (jeden produkt sa môže zobraziť vo viacerých kategóriách s vlastným poradím).
+Kategórie existujú nezávisle od produktov. Každý produkt odkazuje na svoju primárnu kategóriu. Prepojovacia tabuľka (junction table) navyše podporuje priradenie do **viacerých kategórií súčasne (multi-category)**, takže jeden produkt sa môže zobrazovať vo viacerých kategóriách s vlastným poradím zoradenia.
 
 ## Zoradenie
 
-Desktop a mobil používajú **samostatné poradie**. Je to zámerné — desktopová mriežka profituje z iného rozloženia ako mobilný vertikálny zoznam. Admin UI umožňuje nezávislé drag-and-drop zoradenie pre každý viewport s live náhľadom.
+Pre desktop a mobil sa používa **odlišné poradie zoradenia**. Je to zámerné – zatiaľ čo pre desktopovú mriežku je vhodné iné rozloženie, na mobile lepšie funguje klasický vertikálny zoznam. Administračné rozhranie (Admin UI) umožňuje nezávislé usporiadanie pomocou drag-and-drop pre oba typy zobrazení (viewporty) so živým náhľadom.
 
 ## Admin UI
 
-Editor kategórií poskytuje:
+Editor kategórií ponúka:
 
-- **Desktop náhľad**: Responzívna mriežka kategórií zodpovedajúca verejnej landing page
-- **Mobilný náhľad**: Rovnaké dlaždice vo vnútri iPhone mockupu s falošným storefront chrome
-- **Drag-and-drop zoradenie**: Pointer eventy na desktope, natívny HTML5 drag na mobile
-- **Inline úprava názvu**: Klik na ceruzku, písanie, blur uloží
-- **Upload obrázka pre každú dlaždicu**: Klik na dlaždicu nahradí jej pozadie. Obrázky sa optimalizujú server-side cez podpísanú edge funkciu
-- **Batch save**: Všetky zmeny (názvy, poradie, obrázky) sa ukladajú naraz. Tlačidlo "Reset" vráti posledný uložený stav
+- **Náhľad pre desktop**: Responzívna mriežka kategórií, ktorá presne zodpovedá verejnej úvodnej stránke.
+- **Náhľad pre mobil**: Rovnaké dlaždice zobrazené v makete (mockupe) iPhonu s naznačeným rozhraním e-shopu.
+- **Drag-and-drop usporiadanie**: Ovládanie kurzorom (pointer events) na desktope a natívny HTML5 drag-and-drop na mobile.
+- **Inline úprava názvov**: Stačí kliknúť na ikonu ceruzky na ľubovoľnej dlaždici, prepísať názov a kliknutím mimo poľa (blur) ho uložiť.
+- **Nahrávanie obrázkov pre jednotlivé dlaždice**: Kliknutím na dlaždicu nahrajete alebo vymeníte jej obrázok na pozadí. Obrázky sa optimalizujú na strane servera cez zabezpečenú (podpísanú) Edge funkciu.
+- **Hromadné ukladanie (Batch save)**: Všetky vykonané zmeny (názvy, poradie, obrázky) sa uložia naraz. Tlačidlom „Reset“ môžete kedykoľvek vrátiť späť posledný uložený stav.
 
 ## Verejné zobrazenie
 
-Na landing page sa kategórie zobrazujú ako mriežka dlaždíc (desktop) alebo skrolovateľný zoznam (mobil). Každá dlaždica ukazuje názov kategórie a obrázok. Kliknutie prejde na kolekciu, ktorá zobrazí produkty v danej kategórii vo filtrovanom gridu.
+Na úvodnej stránke sa kategórie zobrazujú ako mriežka dlaždíc (na desktope) alebo ako posúvateľný zoznam (na mobile). Každá dlaždica obsahuje názov kategórie a jej obrázok pozadia. Kliknutím na dlaždicu prejdete na stránku kolekcie, kde sa zobrazia produkty z danej kategórie vo filtrovanej mriežke (gride).
 
-Kategória "All" existuje permanentne — dá sa zoradiť, ale nie zmazať. Zobrazuje všetky publikované produkty bez ohľadu na kategóriu.
+Zberná kategória „All“ (Všetko) existuje natrvalo – jej poradie môžete meniť, no nie je možné ju vymazať. Zobrazuje všetky publikované produkty bez ohľadu na ich zaradenie.
 
 ## Multi-category produkty
 
-Produkt môže patriť do viacerých kategórií cez pomocnú tabuľku. Jedna kategória je označená ako "primárna", ktorá určuje kontext breadcrumbu. Ostatné sú sekundárne — produkt sa zobrazí na týchto stránkach, ale primárna kategória sa používa pri označovaní.
+Produkt môže byť zaradený do viacerých kategórií naraz prostredníctvom prepojovacej tabuľky. Práve jedna kategória je označená ako „primárna“ a určuje kontext omrvinkovej navigácie (breadcrumbs). Ostatné kategórie sú sekundárne – produkt sa na týchto stránkach zobrazí, ale pre jeho hlavnú identifikáciu sa používa primárna kategória.
 
-V admin produktovom editore ide o multi-select dropdown s tlačidlom "Nastaviť ako primárnu". Kategórie sa dajú vyhľadávať a vyberať prepínaním.
+V editore produktov v administrácii sa kategórie vyberajú cez rozbaľovacie pole s možnosťou viacnásobného výberu (multi-select) a tlačidlom „Nastaviť ako primárnu“. Kategórie je možné jednoducho vyhľadávať a prepínať.
 
 ## Edge funkcia
 
-Category-media edge funkcia spracováva uploady obrázkov dlaždíc. Funkcia prijíma obrázok cez podpísané URL, optimalizuje ho a vracia verejnú URL.
+Edge funkcia category-media spracováva nahrávanie obrázkov pre dlaždice kategórií. Funkcia prijme obrázok prostredníctvom podpísanej URL adresy, optimalizuje ho a vráti verejný odkaz na obrázok.
 
-## Budúce smery
+## Budúce smerovanie
 
-- Popisy alebo taglines kategórií na stránkach kolekcií
-- Kategórie-špecifické editoriálne úvody (odstavec "Prečo milujeme tech" pre každú kategóriu)
-- Dynamické vytváranie kategórií z admina (aktuálne sú kategórie fixný kurátorský set)
+- Pridanie popisov alebo krátkych sloganov (taglines) pre kategórie na stránkach kolekcií.
+- Editoriálne úvody špecifické pre každú kategóriu (napríklad odsek „Prečo milujeme tech“).
+- Dynamická správa a vytváranie nových kategórií priamo z administrácie (v súčasnosti sú kategórie definované ako pevný kurátorovaný set).
