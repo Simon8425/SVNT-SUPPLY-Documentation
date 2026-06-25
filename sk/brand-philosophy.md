@@ -2,34 +2,34 @@
 
 ## Názov
 
-**SVNT** je Simon SVNT — zakladateľ a kurátor. **SUPPLY** signalizuje zámer: ide o dodávku vecí, ktoré stoja za to, nie o trhovisko so všetkým.
+**SVNT** je Simon SVNT – zakladateľ a kurátor. **SUPPLY** vyjadruje hlavný zámer: ide o starostlivo vybranú dodávku vecí, ktoré naozaj stoja za to, nie o obrovské trhovisko so všetkým možným.
 
-Názov je zámerne skrátený. Číta sa ako značka, nie ako veta. Funguje v malých aj veľkých veľkostiach. Je dostatočne nepriehľadný na to, aby bol zapamätateľný — buď vieš, čo znamená, alebo sa spýtaš.
+Názov je zámerne skrátený. Pôsobí ako grafická značka, nie ako veta. Funguje v malom aj veľkom meradle. Je dostatočne tajomný na to, aby bol zapamätateľný – buď viete, čo znamená, alebo sa na to spýtate.
 
 ---
 
 ## Červená a biela
 
-Paleta značky je úmyselne strohá:
+Paleta značky je úmyselne minimalistická a strohá:
 
-- **Biela** — plátno. Produktové fotografie sú na bielom pozadí. Storefront pôsobí čisto, minimalisticky, galériovo. Nič nekonkuruje produktom.
-- **Červená** — akcent. Používa sa výlučne na interaktívne prvky: tlačidlá, odkazy, hover stavy, uložené srdiečko, podčiarknutie vyhľadávania. Je to jediná farba, ktorá narušuje monochrom.
+- **Biela** – plátno. Produktové fotografie sú na bielom pozadí. Celý e-shop (storefront) tak pôsobí čisto, vzdušne a pripomína umeleckú galériu. Nič tu nekonkuruje samotným produktom.
+- **Červená** – akcent. Používa sa výhradne na interaktívne prvky: tlačidlá, odkazy, stavy po prejdení myšou (hover), ikonu uloženého srdiečka alebo podčiarknutie vyhľadávania. Je to jediná farba, ktorá narúša monochromatický vzhľad.
 
-Táto zdržanlivosť slúži editorialnému hlasu. Produkty sú farebné — rozhranie nie. Červená funguje ako vizuálny ukazovateľ: "tu môžeš konať." Je odvážna, sebavedomá a skôr editoriálna než korporátna.
+Táto zdržanlivosť pomáha vyniknúť editoriálnemu tónu. Produkty sú pestrofarebné – rozhranie nie. Červená funguje ako jasný vizuálny navigátor: „tu môžeš vykonať akciu“. Je odvážna, sebavedomá a pôsobí skôr editoriálnym než korporátnym dojmom.
 
-**Čo to nie je:** Odkaz na vlajku. Voľba palety je estetická, nie národnostná.
+**Čo to nie je:** Nejde o žiadny odkaz na štátnu vlajku. Voľba tejto palety je čisto estetická, nie národná.
 
 ---
 
-## Čo tu znamená "kurátorský"
+## Čo tu znamená „kurátorovaný“
 
-SVNT SUPPLY nescrapuje produktové feedy ani neautomaticky napĺňa katalóg. Každý produkt je:
+SVNT SUPPLY nesťahuje automaticky produktové feedy (nescrapuje) ani bezhlavo neplní katalóg. Každý jeden produkt je:
 
-1. **Vybraný ručne** — admin vytvorí produkt manuálne, napíše editorialný text, nahraje obrázky
-2. **Opísaný** — každý produkt má verdict, výhody/nevýhody, skóre odolnosti, sekcie "pre koho je / pre koho nie je"
-3. **Vydaný zámerne** — produkty vychádzajú cez systém Sunday Dropov, nie na požiadanie
+1. **Vybraný ručne** – administrátor vytvorí produkt manuálne, napíše sprievodný text a nahrá obrázky.
+2. **Opísaný** – každý produkt obsahuje vlastný verdikt, plusy a mínusy, skóre odolnosti a sekcie „Pre koho je určený“ / „Pre koho nie je určený“.
+3. **Zverejnený zámerne** – produkty vychádzajú v rámci pravidelných nedeľných dropov (Sunday Drops), nie kedykoľvek na požiadanie.
 
-Je to magazín, ktorý odkazuje na produkty, nie obchod, ktorý píše blurby. Editorialný hlas je dôležitejší ako transakcia.
+SVNT SUPPLY je v podstate magazín, ktorý odkazuje na zaujímavé produkty, nie klasický obchod, ktorý len kopíruje reklamné popisky (blurby). Editoriálny hlas má vždy prednosť pred samotnou transakciou.
 
 ---
 
@@ -37,16 +37,16 @@ Je to magazín, ktorý odkazuje na produkty, nie obchod, ktorý píše blurby. E
 
 ### 1. Produkt je hrdinom
 
-Produktové fotografie sú vystrihnuté z pozadia, vykreslené veľké a s dostatkom priestoru. Card a hero plochy používajú fixné editorialné fotografické pomery, nie štandardné ecommerce náhľady.
+Produktové fotografie majú orezané pozadie, sú zobrazené vo veľkom formáte a majú dostatok voľného priestoru. Karty produktov a hlavné plochy (hero) využívajú pevné editoriálne fotografické pomery strán, nie štandardné e-commerce náhľady.
 
-### 2. Nič sa neprehráva samo, nič nevyskakuje
+### 2. Žiadne automatické prehrávanie ani vyskakovacie okná
 
-Animácie sú jemné a riadené gestami. Žiadny autoplay carousel, žiadny exit-intent popup (newsletter signup je inline), žiadny odpočítavač. Rozhranie rešpektuje pozornosť.
+Animácie sú jemné a reagujú výhradne na aktivitu používateľa. Na webe nenájdete žiadne automaticky sa posúvajúce bannery (autoplay carousel), žiadne pop-up okná pri odchode zo stránky (newsletter na odber noviniek je priamo v obsahu) ani odpočítavanie času. Rozhranie plne rešpektuje pozornosť návštevníka.
 
-### 3. Desktop-first, mobile-capable
+### 3. Desktop-first s podporou mobilov
 
-Admin panel je iba pre desktop. Storefront funguje na mobile, ale je navrhnutý pre desktopové prehliadanie. Predpokladá sa, že kurátorské nakupovanie prebieha na väčších obrazovkách.
+Administračné rozhranie (Admin UI) je určené výhradne pre desktop. E-shop funguje aj na mobilných zariadeniach, no prioritne je navrhnutý pre prehliadanie na počítači. Predpokladáme, že zážitkové a kurátorované nakupovanie prebieha na väčších obrazovkách.
 
 ### 4. Katalóg je zámerne malý
 
-Katalóg sa dá prejsť za pár minút. Zámerom nie je byť vyčerpávajúci — ale spoľahlivý filter. Ak je niečo na SVNT SUPPLY, niekto sa už rozhodol, že to stojí za tvoj čas.
+Katalóg si dokážete prelistovať za pár minút. Cieľom nie je ponúknuť všetko, ale fungovať ako spoľahlivý filter. Ak sa nejaký produkt nachádza na SVNT SUPPLY, znamená to, že niekto sa už rozhodol, že stojí za váš čas.
