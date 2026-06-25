@@ -1,68 +1,68 @@
-# Systém Sunday Dropov
+# Systém nedeľných dropov (Sunday Drops)
 
 ## Filozofia
 
-SVNT SUPPLY nie je trhovisko s nekonečnou ponukou. Je to **kurátorská editoriálna publikácia**, ktorá každý týždeň vydáva malý, zámerne vybraný výber produktov. Sunday Drop je atomická jednotka tohto rytmu — každú nedeľu ide live nová várka ručne vybraných produktov.
+SVNT SUPPLY nie je trhovisko s nekonečnou ponukou. Je to **kurátorovaná editoriálna publikácia**, ktorá každý týždeň prináša malý, starostlivo zostavený výber produktov. Nedeľný drop (Sunday Drop) je základnou jednotkou tohto cyklu – každú nedeľu vychádza nová várka ručne vybraných produktov.
 
-Názov je zámerný: **dropy**, nie kolekcie ani vydania. Evokuje kultúru limitovaných edícií zo streetwearu a dizajnových objektov, kde záleží na očakávaní a načasovaní. SVNT SUPPLY neprehliadaš bezcieľne — v nedeľu si prídeš pozrieť, čo je nové.
+Názov je zvolený zámerne: **dropy**, nie kolekcie či vydania. Evokuje to kultúru limitovaných edícií zo sveta streetwearu a dizajnových produktov, kde zohrávajú kľúčovú rolu očakávanie a správne načasovanie. SVNT SUPPLY si neprezeráte bezcieľne – v nedeľu sa sem vraciate preto, aby ste zistili, čo je nové.
 
 ---
 
 ## Ako to funguje
 
-### Vydávací rytmus
+### Rytmus vydávania
 
-- Dropy vychádzajú **každú nedeľu v fixnom popoludňajšom čase**.
-- Každý drop má názov (automaticky normalizovaný na `DROP 001`, `DROP 002` atď.) a dátum vydania.
-- Produkt patrí práve do jedného dropu (alebo do žiadneho, ak pochádza z obdobia pred dropovým systémom).
+- Dropy vychádzajú **každú nedeľu v pevne stanovenom popoludňajšom čase**.
+- Každý drop má svoj názov (automaticky formátovaný ako `DROP 001`, `DROP 002` atď.) a dátum vydania.
+- Produkt patrí práve do jedného dropu (prípadne do žiadneho, ak bol do e-shopu pridaný ešte pred zavedením tohto systému).
 
 ### Stavy dropu
 
 | Stav | Význam | Viditeľný verejne? |
 |---|---|---|
-| **Scheduled** | Budúci dátum vydania. Produkty sú skryté do času vydania. | Nie |
+| **Scheduled** | Budúci dátum vydania. Produkty sú skryté až do plánovaného času vydania. | Nie |
 | **Released** | Čas vydania už prešiel. Produkty sú verejne viditeľné. | Áno |
-| **Hidden** | Soft-delete adminom. Odstránené z verejného výhľadu, ale zachované. | Nie |
+| **Hidden** | Dočasne vymazané adminom (soft-delete). Odstránené z verejnej časti webu, no zachované v databáze. | Nie |
 
-Stav sa počíta pri čítaní, nie sa ukladá. Drop state sa odvíja od vydávacieho času a príznaku soft-delete.
+Stav dropu sa dynamicky vypočítava pri načítaní (neukladá sa priamo do databázy). Odvíja sa od plánovaného času vydania a príznaku soft-delete.
 
-### Gating viditeľnosti produktov
+### Časové obmedzenie viditeľnosti produktov (Gating)
 
-Verejný katalóg filtruje produkty podľa času vydania. Naplánované produkty sú pre návštevníkov storefrontu neviditeľné, kým ich drop nevyjde. To znamená, že admin môže drop pripravovať týždne dopredu — pridávať produkty, písať editorial, nahrávať obrázky — a všetko pôjde live automaticky v nedeľu bez manuálneho kroku.
+Verejný katalóg filtruje produkty podľa času zverejnenia. Naplánované produkty sú pre návštevníkov e-shopu neviditeľné, kým príslušný drop oficiálne nevyjde. To znamená, že administrátor môže drop pripravovať aj týždne vopred (pridávať produkty, písať sprievodné texty, nahrávať obrázky) a všetko sa automaticky zverejní v nedeľu bez nutnosti akéhokoľvek manuálneho zásahu.
 
 ---
 
 ## Admin workflow
 
-1. **Vytvorenie dropu**: Nastavíš názov (automaticky `DROP 00X`) a nedeľný dátum.
-2. **Priradenie produktov**: V produktovom editore vyberieš drop z dropdownu. Produkt získa čas vydania dropu.
-3. **Náhľad**: Drop je "scheduled". Produkty sú skryté verejne, ale viditeľné v admine.
-4. **Vydanie**: V nedeľu sa zruší časová brána. Produkty sa automaticky objavia v katalógu.
-5. **Archivácia**: Staré dropy zostávajú v archíve. Landing page boostuje najnovší vydaný drop v popularity score, takže najnovší drop dominuje mriežke počas svojho vydávacieho týždňa.
+1. **Vytvorenie dropu**: Zadáte názov (systém automaticky navrhne `DROP 00X`) a vyberiete nedeľný dátum.
+2. **Priradenie produktov**: V editore produktov zvolíte príslušný drop z rozbaľovacieho zoznamu. Produkt tým prevezme plánovaný čas zverejnenia daného dropu.
+3. **Náhľad**: Drop je v stave „scheduled“ (naplánovaný). Produkty sú na verejnom webe skryté, ale v administrácii sú normálne viditeľné.
+4. **Zverejnenie (Vydanie)**: V nedeľu sa časová závora automaticky uvoľní a produkty sa okamžite objavia v katalógu.
+5. **Archivácia**: Staršie dropy zostávajú dostupné v archíve. Algoritmus úvodnej stránky (landing page) dáva najnovšiemu vydanému dropu extra bonifikáciu v skóre popularity, vďaka čomu najnovšie produkty dominujú na popredných miestach mriežky počas prvého týždňa od vydania.
 
 ### Drop management UI
 
-Drop manager poskytuje:
-- Zoznam s vyhľadávaním, state badge (Scheduled/Released/Hidden) a počtom produktov
-- Create/Edit pohľad s názvom a date pickerom (validuje nedeľu)
-- Soft delete (Hide) a Restore pre každý drop
-- Pohľad priradených produktov: zobrazí všetky produkty v drope, odstráni produkt z dropu
-- Dropy sú zoradené chronologicky, najnovší prvý
+Administračný nástroj pre správu dropov poskytuje:
+- Prehľadný zoznam s vyhľadávaním, stavovými štítkami (Scheduled/Released/Hidden) and počtom priradených produktov.
+- Formulár pre vytvorenie a úpravu s názvom a výberom dátumu (ktorý validuje, či ide o nedeľu).
+- Možnosť dočasného zmazania (Hide) a opätovného obnovenia (Restore) pre každý drop.
+- Prehľad priradených produktov: zobrazenie všetkých produktov v danom drope a možnosť ich rýchleho odstránenia.
+- Usporiadanie dropov chronologicky, od najnovšieho po najstarší.
 
 ---
 
 ## Integrácia s landing page
 
-Algoritmus odporúčaní na landing page dáva významný boost produktom v najnovšom vydanom drope. V kombinácii so signálom novosti to znamená, že produkty z nového dropu dominujú vrchnej časti mriežky počas svojho vydávacieho týždňa. Ako vychádzajú novšie dropy, staršie produkty prirodzene klesajú v popularity rankingu.
+Algoritmus odporúčaní na úvodnej stránke výrazne zvýhodňuje produkty z najnovšieho vydaného dropu. V kombinácii s dátumom pridania to zabezpečuje, že novinky dominujú hornej časti mriežky počas celého prvého týždňa. S príchodom novších dropov staršie produkty prirodzene klesajú v rebríčku popularity.
 
-### Soft delete dizajn
+### Návrh dočasného zmazania (Soft delete)
 
-Dropy sa nikdy nehard-deletujú. Soft-delete nastaví časovú značku namiesto odstránenia riadku. Zachováva sa tak referenčná integrita a umožňuje obnovenie. Produkty v hidden dropoch zostávajú v databáze, ale sú vylúčené z verejných dotazov.
+Dropy sa z databázy nikdy neodstraňujú natrvalo (hard-delete). Funkcia soft-delete iba nastaví časovú pečiatku zmazania namiesto vymazania celého riadka. Tým sa zachováva referenčná integrita dát a uľahčuje prípadné obnovenie. Produkty v skrytých dropoch zostávajú v databáze, ale sú vynechané z verejných dopytov.
 
 ---
 
-## Budúce zváženia
+## Budúci rozvoj
 
-- **Viacero dropov za týždeň**: Systém to už podporuje. UI by sa dalo rozšíriť o kalendárový pohľad.
-- **Témy dropov**: Dropy by mohli niesť tematický label ("Summer Essentials", "Gift Guide") okrem číslovaného názvoslovia.
-- **Notifikácie**: Keďže dropy vychádzajú v známom čase, notifikačný systém by mohol upozorniť odberateľov na nový drop.
+- **Viacero dropov za týždeň**: Databázový systém to už plne podporuje. Administračné rozhranie by sa dalo rozšíriť napríklad o kalendárový náhľad.
+- **Témy dropov**: Dropy by mohli okrem číselného označenia niesť aj tematické štítky (napr. „Summer Essentials“ alebo „Gift Guide“).
+- **Notifikácie**: Keďže dropy vychádzajú v pevne stanovenom čase, notifikačný systém by mohol odberateľov automaticky upozornit na spustenie novej várky produktov.
