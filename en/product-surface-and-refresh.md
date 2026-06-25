@@ -34,12 +34,22 @@ A database trigger fires on product insert and on first publish. It assigns the 
 
 ## Product images
 
-Images go through a three-step admin workflow:
+### Background removal
+
+All product cutout images start as raw photos. Backgrounds are removed with **PhotoRoom**, which is currently free for this workflow. The cutout is uploaded to the admin as a PNG with transparency. A future API connection to PhotoRoom (or a similar service) is planned to automate this step.
+
+### Upload and optimization
+
+After background removal, images go through a three-step admin workflow:
 1. **Request upload URL** — signed URL from a media edge function
 2. **Upload** — direct PUT to object storage
-3. **Finalize** — edge function processes the image (dimensions, alpha detection, bounding box) and stores metadata
+3. **Finalize** — edge function processes the image: detects dimensions, alpha channel, bounding box, and optimizes the file for delivery
 
 Public delivery goes through a caching proxy that adds long-lived immutable cache headers per storage object. Images are never served directly from the raw storage endpoint.
+
+### Storage
+
+During beta, images are stored in a **Supabase S3-compatible storage bucket**. For production, the plan is to migrate to a dedicated object storage provider such as **Google Cloud Storage**, **Amazon S3**, or **Yandex S3**, depending on cost and performance.
 
 ## Newsletter signup
 
